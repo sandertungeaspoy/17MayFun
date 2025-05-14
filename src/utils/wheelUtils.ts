@@ -20,8 +20,8 @@ export const punishmentWheelItems: WheelItem[] = [
     { id: '4', text: 'Take 5 sips', icon: '🍻', color: '#BA0C2F' },
     { id: '5', text: 'Finish your drink', icon: '🍺', color: '#FFFFFF' },
     { id: '6', text: 'Take a shot', icon: '🥃', color: '#00205B' },
-    { id: '7', text: 'Waterfall (you start)', icon: '💧', color: '#BA0C2F' },
-    { id: '8', text: 'Skip a round', icon: '⏭️', color: '#FFFFFF' }
+    { id: '7', text: 'Spin the rules wheel', icon: '📜', color: '#BA0C2F' },
+    { id: '8', text: 'Skip a round', icon: '⏭️', color: '#FFFFFF' },
 ];
 
 // Sample wheel items for the rules wheel

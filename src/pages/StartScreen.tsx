@@ -8,29 +8,29 @@ const StartScreen = () => {
 
     return (
         <div className="start-screen">
-            <Header title="17. Mai Quiz & Spill" />
+            <Header title="17. May Fun & Games" />
 
-            <h2 className="start-screen-subtitle">Velg en aktivitet</h2>
+            <h2 className="start-screen-subtitle">Choose an activity</h2>
 
             <div className="menu-grid">
                 <MenuItem
                     icon="🎁"
-                    title="Premiehjul"
+                    title="Price Wheel"
                     onClick={() => navigate(RoutePath.PRICE_WHEEL)}
                 />
                 <MenuItem
                     icon="😈"
-                    title="Straffehjul"
+                    title="Punishment Wheel"
                     onClick={() => navigate(RoutePath.PUNISHMENT_WHEEL)}
                 />
                 <MenuItem
                     icon="📜"
-                    title="Regelhjul"
+                    title="Rules Wheel"
                     onClick={() => navigate(RoutePath.RULES_WHEEL)}
                 />
                 <MenuItem
                     icon="🎵"
-                    title="Musikk Bingo"
+                    title="Music Bingo"
                     onClick={() => navigate(RoutePath.MUSIC_BINGO)}
                 />
             </div>

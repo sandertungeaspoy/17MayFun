@@ -98,7 +98,7 @@ const Wheel = ({ items, title }: WheelProps) => {
                 onClick={spinWheel}
                 disabled={spinning}
             >
-                {spinning ? 'Spinner...' : 'Spinn hjulet!'}
+                {spinning ? 'Spinning...' : 'Spin the wheel!'}
             </button>
 
             {result && (

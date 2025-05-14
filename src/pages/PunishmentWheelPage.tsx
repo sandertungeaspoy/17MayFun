@@ -10,12 +10,12 @@ const PunishmentWheelPage = () => {
     return (
         <div className="page-content">
             <Header
-                title="Straffehjul"
+                title="Punishment Wheel"
                 showBackButton={true}
                 onBack={() => navigate(RoutePath.HOME)}
             />
 
-            <Wheel items={punishmentWheelItems} title="Spinn for straff!" />
+            <Wheel items={punishmentWheelItems} title="Spin for punishment!" />
         </div>
     );
 };
