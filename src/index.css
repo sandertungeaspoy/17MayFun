@@ -1,38 +1,98 @@
+/* Norwegian flag colors */
 :root {
+  /* Light theme (default) */
+  --background: #FFFFFF;
+  --text: #213547;
+  --primary: #BA0C2F;
+  /* Norwegian flag red */
+  --secondary: #00205B;
+  /* Norwegian flag blue */
+  --accent: #F2F2F2;
+  --button-bg: #F9F9F9;
+  --button-text: #213547;
+  --button-hover: #EFEFEF;
+  --card-bg: #FFFFFF;
+  --card-border: #EEEEEE;
+  --header-bg: #F9F9F9;
+  --menu-item-bg: #FFFFFF;
+  --menu-item-hover: #F5F5F5;
+  --wheel-marker: #BA0C2F;
+  --bingo-square-bg: #FFFFFF;
+  --bingo-square-marked: #E6F7FF;
+  --bingo-square-border: #DDDDDD;
+
+  /* Font settings */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* Dark theme */
+[data-theme='dark'] {
+  --background: #00205B;
+  /* Norwegian flag blue as background */
+  --text: #FFFFFF;
+  --primary: #BA0C2F;
+  /* Norwegian flag red */
+  --secondary: #FFFFFF;
+  /* White */
+  --accent: #1A1A1A;
+  --button-bg: #333333;
+  --button-text: #FFFFFF;
+  --button-hover: #444444;
+  --card-bg: #1A1A1A;
+  --card-border: #333333;
+  --header-bg: #111111;
+  --menu-item-bg: #1A1A1A;
+  --menu-item-hover: #2A2A2A;
+  --wheel-marker: #FFFFFF;
+  --bingo-square-bg: #1A1A1A;
+  --bingo-square-marked: #003366;
+  --bingo-square-border: #333333;
 }
-a:hover {
-  color: #535bf2;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+  margin-bottom: 0.5em;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
 }
 
 button {
@@ -42,27 +102,159 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+button:hover {
+  background-color: var(--button-hover);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile-first approach */
+.container {
+  width: 100%;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
   }
-  a:hover {
-    color: #747bff;
+
+  h1 {
+    font-size: 2.5rem;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
   }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+/* Header styles */
+.app-header {
+  background-color: var(--header-bg);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Menu items */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.menu-item {
+  background-color: var(--menu-item-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--card-border);
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
+  background-color: var(--menu-item-hover);
+}
+
+.menu-item-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.menu-item-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Page content */
+.page-content {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Norwegian flag decoration */
+.flag-decoration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.flag-decoration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(135deg, transparent 0%, transparent 20%, #BA0C2F 20%, #BA0C2F 45%,
+      #FFFFFF 45%, #FFFFFF 55%, #00205B 55%, #00205B 100%);
+  transform: rotate(45deg) translate(20px, -20px);
 }
