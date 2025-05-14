@@ -61,21 +61,33 @@ const Wheel = ({ items, title }: WheelProps) => {
                 <div className="wheel-marker"></div>
 
                 <div className="wheel-inner" ref={wheelRef}>
-                    {items.map((item, index) => (
-                        <div
-                            key={item.id}
-                            className="wheel-segment"
-                            style={{
-                                transform: `rotate(${index * segmentAngle}deg)`,
-                                backgroundColor: item.color
-                            }}
-                        >
-                            <div className="wheel-segment-content">
-                                <div className="wheel-segment-icon">{item.icon}</div>
-                                <div className="wheel-segment-text">{item.text}</div>
+                    {items.map((item, index) => {
+                        // Calculate the rotation for this segment
+                        const rotation = index * segmentAngle;
+
+                        return (
+                            <div
+                                key={item.id}
+                                className="wheel-segment"
+                                style={{
+                                    transform: `rotate(${rotation}deg)`,
+                                    backgroundColor: item.color
+                                }}
+                            >
+                                {/* Position the content */}
+                                <div
+                                    className="wheel-segment-content"
+                                    style={{
+                                        // Adjust the rotation to make text readable
+                                        // transform: `rotate(${45}deg)`,
+                                    }}
+                                >
+                                    {/* <div className="wheel-segment-icon">{item.icon}</div> */}
+                                    <div className="wheel-segment-text">{item.text} {item.icon}</div>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="wheel-center"></div>
