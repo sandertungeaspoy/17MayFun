@@ -84,13 +84,27 @@ export const generateBingoBoard = (size: BoardSize, userId: string): BingoSquare
 export const checkForBingo = (board: BingoSquare[], size: BoardSize): boolean => {
     const { rows, cols } = getBoardDimensions(size);
 
+    // Safety check: ensure the board has the expected number of squares
+    const expectedSquares = rows * cols;
+    if (!board || board.length !== expectedSquares) {
+        return false;
+    }
+
+    // Validate that all board elements have the required properties
+    for (const square of board) {
+        if (!square || typeof square.marked !== 'boolean') {
+            return false;
+        }
+    }
+
     // Check rows
     for (let i = 0; i < rows; i++) {
         const rowStart = i * cols;
         let rowBingo = true;
 
         for (let j = 0; j < cols; j++) {
-            if (!board[rowStart + j].marked) {
+            const index = rowStart + j;
+            if (index >= board.length || !board[index] || !board[index].marked) {
                 rowBingo = false;
                 break;
             }
@@ -104,7 +118,8 @@ export const checkForBingo = (board: BingoSquare[], size: BoardSize): boolean =>
         let colBingo = true;
 
         for (let j = 0; j < rows; j++) {
-            if (!board[j * cols + i].marked) {
+            const index = j * cols + i;
+            if (index >= board.length || !board[index] || !board[index].marked) {
                 colBingo = false;
                 break;
             }
@@ -118,7 +133,8 @@ export const checkForBingo = (board: BingoSquare[], size: BoardSize): boolean =>
         let diag1Bingo = true;
 
         for (let i = 0; i < rows; i++) {
-            if (!board[i * cols + i].marked) {
+            const index = i * cols + i;
+            if (index >= board.length || !board[index] || !board[index].marked) {
                 diag1Bingo = false;
                 break;
             }
@@ -130,7 +146,8 @@ export const checkForBingo = (board: BingoSquare[], size: BoardSize): boolean =>
         let diag2Bingo = true;
 
         for (let i = 0; i < rows; i++) {
-            if (!board[i * cols + (cols - 1 - i)].marked) {
+            const index = i * cols + (cols - 1 - i);
+            if (index >= board.length || !board[index] || !board[index].marked) {
                 diag2Bingo = false;
                 break;
             }
