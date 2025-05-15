@@ -10,7 +10,7 @@ const StartScreen = () => {
         <div className="start-screen">
             <Header title="17. May Fun & Games" />
 
-            <h2 className="start-screen-subtitle">Choose an activity</h2>
+            <h2 className="start-screen-subtitle">Velg en aktivitet</h2>
 
             <div className="menu-grid">
                 <MenuItem
@@ -32,6 +32,11 @@ const StartScreen = () => {
                     icon="🎵"
                     title="Music Bingo"
                     onClick={() => navigate(RoutePath.MUSIC_BINGO)}
+                />
+                <MenuItem
+                    icon="❓"
+                    title="Quiz"
+                    onClick={() => navigate(RoutePath.QUIZ)}
                 />
             </div>
 
