@@ -359,3 +359,17 @@ export const getRandomWheelType = (): 'price' | 'punishment' | 'rules' => {
     const wheelTypes: Array<'price' | 'punishment' | 'rules'> = ['price', 'punishment', 'rules'];
     return wheelTypes[Math.floor(Math.random() * wheelTypes.length)];
 };
+
+// Function to get a random chance outcome
+export const getRandomChanceOutcome = (): string => {
+    const chanceOutcomes = [
+        'Go to Price Wheel',
+        'Go to Punishment Wheel',
+        'Go to Rules Wheel',
+        'Take a shot',
+        'Give a shot',
+        'Pick a prize',
+        'Bingo free spot'
+    ];
+    return chanceOutcomes[Math.floor(Math.random() * chanceOutcomes.length)];
+};

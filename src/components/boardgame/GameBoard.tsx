@@ -5,7 +5,8 @@ import type { GameSpace as GameSpaceType, Player, SpaceType } from '../../types'
 import {
     getTriviaQuestionById,
     getRandomWheelType,
-    getNewRandomTriviaQuestion
+    getNewRandomTriviaQuestion,
+    getRandomChanceOutcome
 } from '../../utils/boardGameUtils';
 
 interface GameBoardProps {
@@ -174,10 +175,12 @@ const GameBoard = forwardRef<
                 break;
 
             case 'chance':
+                // Generate a new random chance outcome each time
+                const chanceOutcome = getRandomChanceOutcome();
                 content = (
                     <div className="space-info-content chance">
                         <h4>Chance</h4>
-                        <p className="chance-outcome">{selectedSpace.chanceOutcome}</p>
+                        <p className="chance-outcome">{chanceOutcome}</p>
                     </div>
                 );
                 break;
