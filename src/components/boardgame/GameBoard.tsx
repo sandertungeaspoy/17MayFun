@@ -8,6 +8,7 @@ import {
     getNewRandomTriviaQuestion,
     getRandomChanceOutcome
 } from '../../utils/boardGameUtils';
+import { decryptAnswer, ENCRYPTION_SALT } from '../../utils/quizUtils';
 
 interface GameBoardProps {
     spaces: GameSpaceType[];
@@ -21,6 +22,7 @@ const GameBoard = forwardRef<
 >(({ spaces, players, currentPlayerIndex }, ref) => {
     const [selectedSpace, setSelectedSpace] = useState<GameSpaceType | null>(null);
     const [showSpaceInfo, setShowSpaceInfo] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
     const boardRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +45,7 @@ const GameBoard = forwardRef<
             // Directly set the selected space and show the modal
             setSelectedSpace(space);
             setShowSpaceInfo(true);
+            setShowAnswer(false); // Reset answer visibility when showing a new space
         }
     }));
 
@@ -62,6 +65,7 @@ const GameBoard = forwardRef<
         // Set the selected space and show the modal
         setSelectedSpace(space);
         setShowSpaceInfo(true);
+        setShowAnswer(false); // Reset answer visibility when clicking on a new space
 
         // Log for debugging
         console.log('Space clicked:', space);
@@ -71,6 +75,12 @@ const GameBoard = forwardRef<
     // Close the space info modal
     const closeSpaceInfo = useCallback(() => {
         setShowSpaceInfo(false);
+        setShowAnswer(false); // Reset answer visibility when closing the modal
+    }, []);
+
+    // Toggle answer visibility
+    const toggleAnswer = useCallback(() => {
+        setShowAnswer(prev => !prev);
     }, []);
 
     // Handle clicks outside the modal
@@ -156,6 +166,22 @@ const GameBoard = forwardRef<
                                                 ? 'Correct answer wins a prize!'
                                                 : 'Incorrect answer gets a punishment!'}
                                         </p>
+                                    )}
+
+                                    {/* Show Answer Button */}
+                                    <button
+                                        className="show-answer-button"
+                                        onClick={toggleAnswer}
+                                    >
+                                        {showAnswer ? 'Hide Answer' : 'Show Answer'}
+                                    </button>
+
+                                    {/* Answer Section */}
+                                    {showAnswer && question.answer && (
+                                        <div className="answer-section">
+                                            <h4>Correct Answer:</h4>
+                                            <p className="answer">{decryptAnswer(question.answer, ENCRYPTION_SALT)}</p>
+                                        </div>
                                     )}
                                 </>
                             ) : (
