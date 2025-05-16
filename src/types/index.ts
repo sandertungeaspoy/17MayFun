@@ -44,6 +44,52 @@ export interface QuizAttempt {
     answers: UserAnswer[];
 }
 
+// Board game types
+export type SpaceType =
+    | 'start'
+    | 'finish'
+    | 'trivia'
+    | 'chance'
+    | 'music-bingo'
+    | 'instant-prize'
+    | 'random-wheel'
+    | 'cheers'
+    | 'drink-sips'
+    | 'give-sips';
+
+export interface GameSpace {
+    id: string;
+    type: SpaceType;
+    color: string;
+    position: {
+        x: number;
+        y: number;
+    };
+    // Additional properties based on type
+    triviaQuestion?: {
+        questionId: string;
+        reward: 'prize' | 'punishment' | 'none';
+    };
+    chanceOutcome?: string; // Text instruction for chance spaces
+    sipsCount?: number;     // For drink-sips and give-sips spaces
+    icon?: string;          // Icon to display on the space
+    label?: string;         // Text label for the space
+}
+
+export interface Player {
+    id: string;
+    name: string;
+    position: number; // Index of the current space
+    color: string;
+}
+
+export interface BoardGameState {
+    spaces: GameSpace[];
+    players: Player[];
+    currentPlayerIndex: number;
+    gameStarted: boolean;
+}
+
 // Route paths
 export const RoutePath = {
     HOME: '/',
@@ -51,7 +97,8 @@ export const RoutePath = {
     PUNISHMENT_WHEEL: '/punishment-wheel',
     RULES_WHEEL: '/rules-wheel',
     MUSIC_BINGO: '/music-bingo',
-    QUIZ: '/quiz'
+    QUIZ: '/quiz',
+    BOARD_GAME: '/board-game'
 } as const;
 
 export type RoutePathType = typeof RoutePath[keyof typeof RoutePath];

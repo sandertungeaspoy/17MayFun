@@ -6,6 +6,7 @@ import PunishmentWheelPage from './pages/PunishmentWheelPage';
 import RulesWheelPage from './pages/RulesWheelPage';
 import MusicBingoPage from './pages/MusicBingoPage';
 import QuizPage from './pages/QuizPage';
+import BoardGamePage from './pages/BoardGamePage';
 import { RoutePath } from './types';
 import './App.css';
 
@@ -23,6 +24,7 @@ function App() {
               <Route path={RoutePath.MUSIC_BINGO} element={<MusicBingoPage />} />
               <Route path={RoutePath.QUIZ} element={<QuizPage />} />
               <Route path={`${RoutePath.QUIZ}/:quizId`} element={<QuizPage />} />
+              <Route path={RoutePath.BOARD_GAME} element={<BoardGamePage />} />
             </Routes>
           </div>
         </Router>

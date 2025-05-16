@@ -38,6 +38,11 @@ const StartScreen = () => {
                     title="Quiz"
                     onClick={() => navigate(RoutePath.QUIZ)}
                 />
+                <MenuItem
+                    icon="🎲"
+                    title="Brettspill"
+                    onClick={() => navigate(RoutePath.BOARD_GAME)}
+                />
             </div>
 
             <div className="flag-decoration"></div>
