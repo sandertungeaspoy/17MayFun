@@ -67,9 +67,6 @@ const GameBoard = forwardRef<
         setShowSpaceInfo(true);
         setShowAnswer(false); // Reset answer visibility when clicking on a new space
 
-        // Log for debugging
-        console.log('Space clicked:', space);
-        console.log('Showing modal:', space.type);
     };
 
     // Close the space info modal
