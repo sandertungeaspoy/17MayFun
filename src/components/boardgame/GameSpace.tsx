@@ -22,6 +22,8 @@ const GameSpace: React.FC<GameSpaceProps> = ({ space, onClick, hasPlayers }) => 
     const getTextColor = () => {
         if (space.color === '#FFFFFF') {
             return '#000000'; // Black text on white background
+        } else if (space.color === 'checkered') {
+            return '#FF5252'; // Red text on checkered background for better visibility
         }
         return '#FFFFFF'; // White text on colored backgrounds
     };
