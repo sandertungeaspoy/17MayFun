@@ -399,8 +399,8 @@ export const quizzes: QuizConfig[] = [
             {
                 id: "40",
                 type: "text",
-                question: "Fullfør dette kjente internettuttrykket: 'OK, boomer' – hva kommer etter?",
-                answer: encryptAnswer("Nothing, that’s it.", ENCRYPTION_SALT)
+                question: "Fullfør dette kjente internettuttrykket: 'OK, boomer' - hva kommer etter?",
+                answer: encryptAnswer("Nothing, that's it.", ENCRYPTION_SALT)
             }
         ]
     },
