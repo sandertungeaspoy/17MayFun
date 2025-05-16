@@ -204,11 +204,40 @@ export const generateGameSpaces = (): GameSpace[] => {
     return spaces;
 };
 
-// Function to get a random trivia question
-export const getRandomTriviaQuestion = () => {
-    const allQuizzes = quizzes;
-    const randomQuiz = allQuizzes[Math.floor(Math.random() * allQuizzes.length)];
-    const randomQuestion = randomQuiz.questions[Math.floor(Math.random() * randomQuiz.questions.length)];
+// Function to get used question IDs from localStorage
+export const getUsedQuestionIds = (): string[] => {
+    const usedIds = localStorage.getItem('usedTriviaQuestions');
+    return usedIds ? JSON.parse(usedIds) : [];
+};
+
+// Function to save a used question ID
+export const markQuestionAsUsed = (questionId: string): void => {
+    const usedIds = getUsedQuestionIds();
+    if (!usedIds.includes(questionId)) {
+        usedIds.push(questionId);
+        localStorage.setItem('usedTriviaQuestions', JSON.stringify(usedIds));
+    }
+};
+
+// Function to reset used questions
+export const resetUsedQuestions = (): void => {
+    localStorage.removeItem('usedTriviaQuestions');
+};
+
+// Function to get a new random question that hasn't been used yet
+export const getNewRandomTriviaQuestion = () => {
+    const usedIds = getUsedQuestionIds();
+    const allQuestions = quizzes.flatMap(quiz => quiz.questions);
+    const unusedQuestions = allQuestions.filter(q => !usedIds.includes(q.id));
+
+    // If all questions have been used, return null
+    if (unusedQuestions.length === 0) {
+        return null;
+    }
+
+    // Get a random unused question
+    const randomQuestion = unusedQuestions[Math.floor(Math.random() * unusedQuestions.length)];
+    markQuestionAsUsed(randomQuestion.id);
 
     // Randomly assign a reward
     const rewards: Array<'prize' | 'punishment' | 'none'> = ['prize', 'punishment', 'none'];
@@ -218,6 +247,11 @@ export const getRandomTriviaQuestion = () => {
         questionId: randomQuestion.id,
         reward: randomReward
     };
+};
+
+// Function to get a random trivia question (legacy function for backward compatibility)
+export const getRandomTriviaQuestion = () => {
+    return getNewRandomTriviaQuestion();
 };
 
 // Function to create a new player

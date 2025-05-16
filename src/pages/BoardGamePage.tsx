@@ -9,7 +9,8 @@ import {
     getNextPlayerIndex,
     saveGameState,
     loadGameState,
-    getRandomTriviaQuestion
+    getRandomTriviaQuestion,
+    resetUsedQuestions
 } from '../utils/boardGameUtils';
 import { RoutePath } from '../types';
 import type { Player, BoardGameState } from '../types';
@@ -113,14 +114,17 @@ const BoardGamePage: React.FC = () => {
                 case 'trivia':
                     // Generate a new random trivia question
                     const triviaQuestion = getRandomTriviaQuestion();
+
                     // Update the space with the new question
                     const updatedSpaces = [...spaces];
                     updatedSpaces[updatedPlayer.position] = {
                         ...landedSpace,
-                        triviaQuestion
+                        triviaQuestion: triviaQuestion || undefined
                     };
 
-                    message = 'Answer the trivia question!';
+                    message = triviaQuestion
+                        ? 'Answer the trivia question!'
+                        : 'Player takes 1 sip and give 1 sip.';
 
                     // Auto-activate the space
                     setTimeout(() => {
@@ -228,6 +232,10 @@ const BoardGamePage: React.FC = () => {
     // Reset the game
     const handleResetGame = () => {
         if (window.confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+            // Reset used trivia questions
+            resetUsedQuestions();
+
+            // Initialize new game state
             const newGameState = initializeGameState();
             setGameState(newGameState);
             saveGameState(newGameState);

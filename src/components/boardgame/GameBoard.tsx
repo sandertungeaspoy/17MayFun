@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import GameSpace from './GameSpace';
 import PlayerPiece from './PlayerPiece';
 import type { GameSpace as GameSpaceType, Player, SpaceType } from '../../types';
-import { getTriviaQuestionById, getRandomWheelType } from '../../utils/boardGameUtils';
+import {
+    getTriviaQuestionById,
+    getRandomWheelType,
+    getNewRandomTriviaQuestion
+} from '../../utils/boardGameUtils';
 
 interface GameBoardProps {
     spaces: GameSpaceType[];
@@ -29,6 +33,17 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
 
     // Handle clicking on a space
     const handleSpaceClick = (space: GameSpaceType) => {
+        // If it's a trivia space and doesn't have a question, generate one
+        if (space.type === 'trivia' && !space.triviaQuestion) {
+            const newQuestion = getNewRandomTriviaQuestion();
+            if (newQuestion) {
+                space = {
+                    ...space,
+                    triviaQuestion: newQuestion
+                };
+            }
+        }
+
         setSelectedSpace(space);
         setShowSpaceInfo(true);
     };
@@ -50,38 +65,47 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
         let content;
         switch (selectedSpace.type) {
             case 'trivia':
-                const question = selectedSpace.triviaQuestion
-                    ? getTriviaQuestionById(selectedSpace.triviaQuestion.questionId)
-                    : null;
+                // Check if there's a trivia question assigned
+                if (selectedSpace.triviaQuestion) {
+                    const question = getTriviaQuestionById(selectedSpace.triviaQuestion.questionId);
 
-                content = (
-                    <div className="space-info-content trivia">
-                        <h4>Trivia Question</h4>
-                        {question ? (
-                            <>
-                                <p className="question">{question.question}</p>
-                                {question.type === 'multiple-choice' && question.options && (
-                                    <div className="options">
-                                        {question.options.map((option, index) => (
-                                            <div key={index} className="option">
-                                                {option}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                {selectedSpace.triviaQuestion?.reward !== 'none' && (
-                                    <p className="reward">
-                                        {selectedSpace.triviaQuestion?.reward === 'prize'
-                                            ? 'Correct answer wins a prize!'
-                                            : 'Incorrect answer gets a punishment!'}
-                                    </p>
-                                )}
-                            </>
-                        ) : (
-                            <p>Question not found</p>
-                        )}
-                    </div>
-                );
+                    content = (
+                        <div className="space-info-content trivia">
+                            <h4>Trivia Question</h4>
+                            {question ? (
+                                <>
+                                    <p className="question">{question.question}</p>
+                                    {question.type === 'multiple-choice' && question.options && (
+                                        <div className="options">
+                                            {question.options.map((option, index) => (
+                                                <div key={index} className="option">
+                                                    {option}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {selectedSpace.triviaQuestion?.reward !== 'none' && (
+                                        <p className="reward">
+                                            {selectedSpace.triviaQuestion?.reward === 'prize'
+                                                ? 'Correct answer wins a prize!'
+                                                : 'Incorrect answer gets a punishment!'}
+                                        </p>
+                                    )}
+                                </>
+                            ) : (
+                                <p>Question not found</p>
+                            )}
+                        </div>
+                    );
+                } else {
+                    // No question available (all have been used)
+                    content = (
+                        <div className="space-info-content trivia">
+                            <h4>Trivia</h4>
+                            <p>Player takes 1 sip and give 1 sip.</p>
+                        </div>
+                    );
+                }
                 break;
 
             case 'chance':
