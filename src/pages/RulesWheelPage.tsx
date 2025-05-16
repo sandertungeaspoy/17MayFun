@@ -10,12 +10,12 @@ const RulesWheelPage = () => {
     return (
         <div className="page-content">
             <Header
-                title="Rules Wheel"
+                title="Regelhjul"
                 showBackButton={true}
                 onBack={() => navigate(RoutePath.HOME)}
             />
 
-            <Wheel items={rulesWheelItems} title="Spin for new rules!" />
+            <Wheel items={rulesWheelItems} title="Spinn for nye regler!" />
         </div>
     );
 };

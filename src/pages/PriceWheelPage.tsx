@@ -10,12 +10,12 @@ const PriceWheelPage = () => {
     return (
         <div className="page-content">
             <Header
-                title="Price Wheel"
+                title="Premiehjul"
                 showBackButton={true}
                 onBack={() => navigate(RoutePath.HOME)}
             />
 
-            <Wheel items={priceWheelItems} title="Spin for a prize!" />
+            <Wheel items={priceWheelItems} title="Spinn for en premie!" />
         </div>
     );
 };

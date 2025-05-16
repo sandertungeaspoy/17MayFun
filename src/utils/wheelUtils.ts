@@ -2,38 +2,38 @@ import type { WheelItem } from '../types';
 
 // Sample wheel items for the price wheel
 export const priceWheelItems: WheelItem[] = [
-    { id: '1', text: 'Give 1 sip', icon: '🥤', color: '#BA0C2F' },
-    { id: '2', text: 'Give 2 sips', icon: '🥤', color: '#FFFFFF' },
-    { id: '3', text: 'Give 3 sips', icon: '🥤', color: '#00205B' },
-    { id: '4', text: 'Give 5 sips', icon: '🍻', color: '#BA0C2F' },
-    { id: '5', text: 'Choose someone to drink', icon: '👉', color: '#FFFFFF' },
-    { id: '6', text: 'Everyone drinks', icon: '🎉', color: '#00205B' },
-    { id: '7', text: 'Give out 10 sips', icon: '🍾', color: '#BA0C2F' },
-    { id: '8', text: 'Cheers!', icon: '🥂', color: '#FFFFFF' }
+    { id: '1', text: 'Gi 1 slurk', icon: '🥤', color: '#BA0C2F' },
+    { id: '2', text: 'Gi 2 slurker', icon: '🥤', color: '#FFFFFF' },
+    { id: '3', text: 'Gi 3 slurker', icon: '🥤', color: '#00205B' },
+    { id: '4', text: 'Gratis shot', icon: '🍾', color: '#BA0C2F' },
+    { id: '5', text: 'Velg noen som må drikke', icon: '👉', color: '#FFFFFF' },
+    { id: '6', text: 'Alle drikker', icon: '🎉', color: '#00205B' },
+    { id: '7', text: 'Gratis shot', icon: '🍾', color: '#BA0C2F' },
+    { id: '8', text: 'Skål!', icon: '🥂', color: '#FFFFFF' }
 ];
 
 // Sample wheel items for the punishment wheel
 export const punishmentWheelItems: WheelItem[] = [
-    { id: '1', text: 'Take 1 sip', icon: '🥤', color: '#BA0C2F' },
-    { id: '2', text: 'Take 2 sips', icon: '🥤', color: '#FFFFFF' },
-    { id: '3', text: 'Take 3 sips', icon: '🥤', color: '#00205B' },
-    { id: '4', text: 'Take 5 sips', icon: '🍻', color: '#BA0C2F' },
-    { id: '5', text: 'Finish your drink', icon: '🍺', color: '#FFFFFF' },
-    { id: '6', text: 'Take a shot', icon: '🥃', color: '#00205B' },
-    { id: '7', text: 'Spin the rules wheel', icon: '📜', color: '#BA0C2F' },
-    { id: '8', text: 'Skip a round', icon: '⏭️', color: '#FFFFFF' },
+    { id: '1', text: 'Ta 1 slurk', icon: '🥤', color: '#BA0C2F' },
+    { id: '2', text: 'Ta 2 slurker', icon: '🥤', color: '#FFFFFF' },
+    { id: '3', text: 'Ta 3 slurker', icon: '🥤', color: '#00205B' },
+    { id: '4', text: 'Spinn regelhjulet', icon: '📜', color: '#BA0C2F' },
+    { id: '5', text: 'Tøm drikken din', icon: '🍺', color: '#FFFFFF' },
+    { id: '6', text: 'Ta en shot', icon: '🥃', color: '#00205B' },
+    { id: '7', text: 'Spinn regelhjulet', icon: '📜', color: '#BA0C2F' },
+    { id: '8', text: 'Hopp over en runde', icon: '⏭️', color: '#FFFFFF' },
 ];
 
 // Sample wheel items for the rules wheel
 export const rulesWheelItems: WheelItem[] = [
-    { id: '1', text: 'No pointing', icon: '👉', color: '#BA0C2F' },
-    { id: '2', text: 'Drink with non-dominant hand', icon: '🤚', color: '#FFFFFF' },
-    { id: '3', text: 'No names', icon: '📛', color: '#00205B' },
-    { id: '4', text: 'No saying "drink"', icon: '🙊', color: '#BA0C2F' },
-    { id: '5', text: 'No bathroom breaks', icon: '🚽', color: '#FFFFFF' },
-    { id: '6', text: 'Must toast before drinking', icon: '🥂', color: '#00205B' },
-    { id: '7', text: 'Speak in accent', icon: '🗣️', color: '#BA0C2F' },
-    { id: '8', text: 'No phones', icon: '📱', color: '#FFFFFF' }
+    { id: '1', text: 'Ingen peking', icon: '👉', color: '#BA0C2F' },
+    { id: '2', text: 'Drikk med ikke-dominant hånd', icon: '🤚', color: '#FFFFFF' },
+    { id: '3', text: 'Ingen navn', icon: '📛', color: '#00205B' },
+    { id: '4', text: 'Ikke si "drikke"', icon: '🙊', color: '#BA0C2F' },
+    { id: '5', text: 'Ingen toalettpauser', icon: '🚽', color: '#FFFFFF' },
+    { id: '6', text: 'Må skåle før du drikker', icon: '🥂', color: '#00205B' },
+    { id: '7', text: 'Snakk med aksent', icon: '🗣️', color: '#BA0C2F' },
+    { id: '8', text: 'Ingen telefoner', icon: '📱', color: '#FFFFFF' }
 ];
 
 // Function to get a random item from a wheel
