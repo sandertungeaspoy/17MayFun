@@ -46,6 +46,7 @@ const GameSpace: React.FC<GameSpaceProps> = ({ space, onClick, hasPlayers }) => 
                 transform: `translate(${space.position.x * 100}px, ${space.position.y * 100}px)`
             }}
             onClick={onClick}
+            data-id={space.id}
         >
             <div className="space-icon">{space.icon}</div>
             <div className="space-label">{space.label}</div>

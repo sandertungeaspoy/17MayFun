@@ -2,7 +2,7 @@ import type { GameSpace, SpaceType, Player, BoardGameState } from '../types';
 import { quizzes } from './quizUtils';
 
 // Constants for the board game
-const BOARD_SIZE = 16; // Number of spaces on the board
+const BOARD_SIZE = 32; // Number of spaces on the board
 const PLAYER_COLORS = [
     '#FF5252', // Red
     '#4CAF50', // Green
@@ -72,27 +72,50 @@ export const getLabelForType = (type: SpaceType): string => {
 
 // Function to calculate position for a space in a loop layout
 export const calculatePosition = (index: number, totalSpaces: number): { x: number, y: number } => {
-    // Create a non-circular loop layout
-    // This is a simplified calculation that creates a rectangular loop
-    // You can customize this to create more interesting shapes
+    // Create a more interesting path with multiple segments and turns
+    // This creates a winding path that forms a closed loop
 
-    const boardWidth = 4; // Number of spaces in the width
-    const boardHeight = Math.ceil(totalSpaces / 4); // Calculate height based on total spaces
+    const boardSize = Math.ceil(Math.sqrt(totalSpaces)) + 2; // Size of the board grid
+    const center = Math.floor(boardSize / 2);
 
-    // Calculate the perimeter positions
-    if (index < boardWidth) {
-        // Top row (left to right)
-        return { x: index, y: 0 };
-    } else if (index < boardWidth + boardHeight - 1) {
-        // Right column (top to bottom)
-        return { x: boardWidth - 1, y: index - boardWidth + 1 };
-    } else if (index < 2 * boardWidth + boardHeight - 2) {
-        // Bottom row (right to left)
-        return { x: 2 * boardWidth + boardHeight - 3 - index, y: boardHeight - 1 };
-    } else {
-        // Left column (bottom to top)
-        return { x: 0, y: totalSpaces - index };
+    // Create a spiral-like path
+    let x = 0;
+    let y = 0;
+    let direction = 0; // 0: right, 1: down, 2: left, 3: up
+    let steps = 1;
+    let stepCount = 0;
+    let turnCount = 0;
+
+    for (let i = 0; i < index; i++) {
+        // Move in the current direction
+        switch (direction) {
+            case 0: x++; break; // Right
+            case 1: y++; break; // Down
+            case 2: x--; break; // Left
+            case 3: y--; break; // Up
+        }
+
+        stepCount++;
+
+        // Check if we need to turn
+        if (stepCount === steps) {
+            direction = (direction + 1) % 4;
+            stepCount = 0;
+            turnCount++;
+
+            // Increase steps every 2 turns
+            if (turnCount % 2 === 0) {
+                steps++;
+            }
+        }
     }
+
+    // Scale and center the coordinates
+    const scale = 2.5;
+    return {
+        x: (x * scale) + center,
+        y: (y * scale) + center
+    };
 };
 
 // Function to generate the board spaces
@@ -100,26 +123,40 @@ export const generateGameSpaces = (): GameSpace[] => {
     const spaces: GameSpace[] = [];
     const totalSpaces = BOARD_SIZE;
 
-    // Define the distribution of space types
-    const spaceTypes: SpaceType[] = [
-        'start',
-        'trivia', 'trivia', 'trivia',
-        'chance', 'chance',
-        'music-bingo', 'music-bingo',
-        'instant-prize',
-        'random-wheel',
-        'cheers', 'cheers',
-        'drink-sips', 'drink-sips',
-        'give-sips', 'give-sips'
-    ];
+    // Create a weighted distribution of space types
+    const spaceTypeDistribution: SpaceType[] = [];
+
+    // Add start space
+    spaceTypeDistribution.push('start');
+
+    // Add other space types with desired frequencies
+    spaceTypeDistribution.push(...Array(6).fill('trivia'));
+    spaceTypeDistribution.push(...Array(5).fill('chance'));
+    spaceTypeDistribution.push(...Array(4).fill('music-bingo'));
+    spaceTypeDistribution.push(...Array(3).fill('instant-prize'));
+    spaceTypeDistribution.push(...Array(3).fill('random-wheel'));
+    spaceTypeDistribution.push(...Array(4).fill('cheers'));
+    spaceTypeDistribution.push(...Array(3).fill('drink-sips'));
+    spaceTypeDistribution.push(...Array(3).fill('give-sips'));
+
+    // Shuffle the space types to randomize them
+    const shuffledTypes = [...spaceTypeDistribution].sort(() => Math.random() - 0.5);
+
+    // If we need more space types than in our distribution, repeat the pattern
+    const repeatedTypes: SpaceType[] = [];
+    while (repeatedTypes.length < totalSpaces) {
+        repeatedTypes.push(...shuffledTypes);
+    }
+
+    // Make sure the first space is always 'start'
+    repeatedTypes[0] = 'start';
 
     // Colors for the spaces (red, white, blue)
     const colors = ['#BA0C2F', '#FFFFFF', '#00205B'];
 
     // Create the spaces
     for (let i = 0; i < totalSpaces; i++) {
-        const typeIndex = i % spaceTypes.length;
-        const type = spaceTypes[typeIndex];
+        const type = repeatedTypes[i];
 
         // Determine color based on type and position
         let color;
@@ -142,21 +179,7 @@ export const generateGameSpaces = (): GameSpace[] => {
         };
 
         // Add type-specific properties
-        if (type === 'trivia') {
-            // Randomly select a quiz and question
-            const allQuizzes = quizzes;
-            const randomQuiz = allQuizzes[Math.floor(Math.random() * allQuizzes.length)];
-            const randomQuestion = randomQuiz.questions[Math.floor(Math.random() * randomQuiz.questions.length)];
-
-            // Randomly assign a reward
-            const rewards: Array<'prize' | 'punishment' | 'none'> = ['prize', 'punishment', 'none'];
-            const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
-
-            space.triviaQuestion = {
-                questionId: randomQuestion.id,
-                reward: randomReward
-            };
-        } else if (type === 'chance') {
+        if (type === 'chance') {
             // Random chance outcomes
             const chanceOutcomes = [
                 'Go to Price Wheel',
@@ -177,6 +200,22 @@ export const generateGameSpaces = (): GameSpace[] => {
     }
 
     return spaces;
+};
+
+// Function to get a random trivia question
+export const getRandomTriviaQuestion = () => {
+    const allQuizzes = quizzes;
+    const randomQuiz = allQuizzes[Math.floor(Math.random() * allQuizzes.length)];
+    const randomQuestion = randomQuiz.questions[Math.floor(Math.random() * randomQuiz.questions.length)];
+
+    // Randomly assign a reward
+    const rewards: Array<'prize' | 'punishment' | 'none'> = ['prize', 'punishment', 'none'];
+    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+
+    return {
+        questionId: randomQuestion.id,
+        reward: randomReward
+    };
 };
 
 // Function to create a new player
@@ -202,13 +241,26 @@ export const createPlayer = (name: string, players: Player[]): Player => {
 };
 
 // Function to move a player
-export const movePlayer = (player: Player, steps: number, totalSpaces: number): Player => {
+export const movePlayer = (player: Player, steps: number, totalSpaces: number): {
+    updatedPlayer: Player;
+    passedStart: boolean;
+    landedOnStart: boolean;
+} => {
+    const oldPosition = player.position;
     // Calculate new position, wrapping around if necessary
-    const newPosition = (player.position + steps) % totalSpaces;
+    const newPosition = (oldPosition + steps) % totalSpaces;
+
+    // Check if player passed or landed on start
+    const passedStart = oldPosition + steps >= totalSpaces;
+    const landedOnStart = newPosition === 0;
 
     return {
-        ...player,
-        position: newPosition
+        updatedPlayer: {
+            ...player,
+            position: newPosition
+        },
+        passedStart,
+        landedOnStart
     };
 };
 

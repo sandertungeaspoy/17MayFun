@@ -8,7 +8,8 @@ import {
     movePlayer,
     getNextPlayerIndex,
     saveGameState,
-    loadGameState
+    loadGameState,
+    getRandomTriviaQuestion
 } from '../utils/boardGameUtils';
 import { RoutePath } from '../types';
 import type { Player, BoardGameState } from '../types';
@@ -69,7 +70,7 @@ const BoardGamePage: React.FC = () => {
         if (!currentPlayer) return;
 
         // Move the player
-        const updatedPlayer = movePlayer(currentPlayer, steps, spaces.length);
+        const { updatedPlayer, passedStart, landedOnStart } = movePlayer(currentPlayer, steps, spaces.length);
 
         // Update the player in the players array
         const updatedPlayers = players.map(player =>
@@ -79,37 +80,122 @@ const BoardGamePage: React.FC = () => {
         // Get the space the player landed on
         const landedSpace = spaces[updatedPlayer.position];
 
+        // Handle special rules for start/finish
+        if (passedStart) {
+            setSpaceActionMessage('You passed Start! Go to the Price Wheel!');
+            setTimeout(() => {
+                navigate(RoutePath.PRICE_WHEEL);
+            }, 2000);
+            return;
+        }
+
+        if (landedOnStart) {
+            setSpaceActionMessage('You landed on Start! Go to the Rules Wheel!');
+            setTimeout(() => {
+                navigate(RoutePath.RULES_WHEEL);
+            }, 2000);
+            return;
+        }
+
         // Set a message based on the space type
         let message = '';
         if (landedSpace) {
             switch (landedSpace.type) {
                 case 'trivia':
+                    // Generate a new random trivia question
+                    const triviaQuestion = getRandomTriviaQuestion();
+                    // Update the space with the new question
+                    const updatedSpaces = [...spaces];
+                    updatedSpaces[updatedPlayer.position] = {
+                        ...landedSpace,
+                        triviaQuestion
+                    };
+
                     message = 'Answer the trivia question!';
+
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
+
+                    // Update game state with the new spaces
+                    setGameState(prevState => ({
+                        ...prevState,
+                        spaces: updatedSpaces
+                    }));
                     break;
                 case 'chance':
                     message = `Chance: ${landedSpace.chanceOutcome}`;
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'music-bingo':
                     message = 'Music Bingo space!';
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'instant-prize':
                     message = 'You won an instant prize!';
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'random-wheel':
                     message = 'Spin a random wheel!';
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'cheers':
                     message = 'Cheers! Everyone drinks!';
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'drink-sips':
                     message = `Drink ${landedSpace.sipsCount} sips!`;
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 case 'give-sips':
                     message = `Give ${landedSpace.sipsCount} sips to another player!`;
-                    break;
-                case 'start':
-                case 'finish':
-                    message = 'Start/Finish space!';
+                    // Auto-activate the space
+                    setTimeout(() => {
+                        const spaceElement = document.querySelector(`.game-space[data-id="${landedSpace.id}"]`);
+                        if (spaceElement) {
+                            spaceElement.dispatchEvent(new Event('click'));
+                        }
+                    }, 500);
                     break;
                 default:
                     message = `Landed on ${landedSpace.label}`;
