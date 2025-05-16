@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import GameSpace from './GameSpace';
 import PlayerPiece from './PlayerPiece';
-import type { GameSpace as GameSpaceType, Player, SpaceType } from '../../types';
+import type { GameSpace as GameSpaceType, Player } from '../../types';
 import {
     getTriviaQuestionById,
     getRandomWheelType,
@@ -41,7 +41,6 @@ const GameBoard = forwardRef<
     // Expose methods to parent component
     useImperativeHandle(ref, () => ({
         showSpaceInfo: (space: GameSpaceType) => {
-            console.log('showSpaceInfo called with space:', space);
             // Directly set the selected space and show the modal
             setSelectedSpace(space);
             setShowSpaceInfo(true);

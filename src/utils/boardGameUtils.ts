@@ -67,7 +67,7 @@ export const getLabelForType = (type: SpaceType): string => {
 };
 
 // Function to calculate position for a space in a loop layout
-export const calculatePosition = (index: number, totalSpaces: number): { x: number, y: number } => {
+export const calculatePosition = (index: number): { x: number, y: number } => {
     // Create a rectangular board layout that fits within the visible area
     // This ensures all spaces are visible on screen
 
@@ -175,7 +175,7 @@ export const generateGameSpaces = (): GameSpace[] => {
             id: i.toString(),
             type,
             color,
-            position: calculatePosition(i, totalSpaces),
+            position: calculatePosition(i),
             icon: getIconForType(type),
             label: getLabelForType(type)
         };
