@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import GameSpace from './GameSpace';
 import PlayerPiece from './PlayerPiece';
 import type { GameSpace as GameSpaceType, Player, SpaceType } from '../../types';
@@ -14,10 +14,14 @@ interface GameBoardProps {
     currentPlayerIndex: number;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerIndex }) => {
+const GameBoard = forwardRef<
+    { showSpaceInfo: (space: GameSpaceType) => void },
+    GameBoardProps
+>(({ spaces, players, currentPlayerIndex }, ref) => {
     const [selectedSpace, setSelectedSpace] = useState<GameSpaceType | null>(null);
     const [showSpaceInfo, setShowSpaceInfo] = useState(false);
     const boardRef = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
 
     // Center the board view when it first renders
     useEffect(() => {
@@ -30,6 +34,16 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
             }
         }
     }, [spaces]);
+
+    // Expose methods to parent component
+    useImperativeHandle(ref, () => ({
+        showSpaceInfo: (space: GameSpaceType) => {
+            console.log('showSpaceInfo called with space:', space);
+            // Directly set the selected space and show the modal
+            setSelectedSpace(space);
+            setShowSpaceInfo(true);
+        }
+    }));
 
     // Handle clicking on a space
     const handleSpaceClick = (space: GameSpaceType) => {
@@ -44,14 +58,40 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
             }
         }
 
+        // Set the selected space and show the modal
         setSelectedSpace(space);
         setShowSpaceInfo(true);
+
+        // Log for debugging
+        console.log('Space clicked:', space);
+        console.log('Showing modal:', space.type);
     };
 
     // Close the space info modal
-    const closeSpaceInfo = () => {
+    const closeSpaceInfo = useCallback(() => {
         setShowSpaceInfo(false);
-    };
+    }, []);
+
+    // Handle clicks outside the modal
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showSpaceInfo &&
+                modalRef.current &&
+                !modalRef.current.contains(event.target as Node)) {
+                closeSpaceInfo();
+            }
+        };
+
+        // Add event listener when modal is shown
+        if (showSpaceInfo) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        // Clean up the event listener
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showSpaceInfo, closeSpaceInfo]);
 
     // Get players on a specific space
     const getPlayersOnSpace = (spaceId: string) => {
@@ -183,7 +223,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
 
         return (
             <div className={`space-info-modal ${showSpaceInfo ? 'show' : ''}`}>
-                <div className="space-info-container">
+                <div className="space-info-container" ref={modalRef}>
                     <div className="space-info-header">
                         <div className="space-icon">{selectedSpace.icon}</div>
                         <h3>{selectedSpace.label}</h3>
@@ -221,6 +261,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
             {renderSpaceInfo()}
         </div>
     );
-};
+});
 
 export default GameBoard;
