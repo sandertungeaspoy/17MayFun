@@ -51,7 +51,9 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
             if (rollCount >= maxRolls) {
                 clearInterval(rollInterval);
                 setIsRolling(false);
-                onRollDice(diceResult || roll);
+                const finalRoll = roll; // Use the final roll value
+                setDiceResult(finalRoll); // Update the state for display
+                onRollDice(finalRoll); // Pass the final roll to the parent
             }
         }, 100);
     };
