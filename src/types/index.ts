@@ -73,6 +73,7 @@ export interface GameSpace {
     sipsCount?: number;     // For drink-sips and give-sips spaces
     icon?: string;          // Icon to display on the space
     label?: string;         // Text label for the space
+    specialAction?: 'price-wheel' | 'rules-wheel'; // Special action for start spaces
 }
 
 export interface Player {

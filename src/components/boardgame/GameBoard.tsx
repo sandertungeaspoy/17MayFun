@@ -104,6 +104,31 @@ const GameBoard = forwardRef<
 
         let content;
         switch (selectedSpace.type) {
+            case 'start':
+                if (selectedSpace.specialAction === 'price-wheel') {
+                    content = (
+                        <div className="space-info-content start">
+                            <h4>Passed Start!</h4>
+                            <p>You get to spin the Price Wheel!</p>
+                        </div>
+                    );
+                } else if (selectedSpace.specialAction === 'rules-wheel') {
+                    content = (
+                        <div className="space-info-content start">
+                            <h4>Landed on Start!</h4>
+                            <p>You get to spin the Rules Wheel!</p>
+                        </div>
+                    );
+                } else {
+                    content = (
+                        <div className="space-info-content start">
+                            <h4>Start/Finish</h4>
+                            <p>This is the starting point of the game.</p>
+                        </div>
+                    );
+                }
+                break;
+
             case 'trivia':
                 // Check if there's a trivia question assigned
                 if (selectedSpace.triviaQuestion) {

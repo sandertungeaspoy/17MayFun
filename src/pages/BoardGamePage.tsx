@@ -13,7 +13,7 @@ import {
     resetUsedQuestions
 } from '../utils/boardGameUtils';
 import { RoutePath } from '../types';
-import type { Player, BoardGameState } from '../types';
+import type { Player, BoardGameState, GameSpace as GameSpaceType } from '../types';
 
 const BoardGamePage: React.FC = () => {
     const navigate = useNavigate();
@@ -93,14 +93,62 @@ const BoardGamePage: React.FC = () => {
 
         // Handle special rules for start/finish
         if (passedStart) {
-            // Navigate to Price Wheel immediately
-            navigate(RoutePath.PRICE_WHEEL);
+            // Create a virtual space for "passed start"
+            const passedStartSpace: GameSpaceType = {
+                id: 'passed-start',
+                type: 'start',
+                color: 'checkered',
+                position: { x: 0, y: 0 },
+                icon: '🏁',
+                label: 'Passed Start',
+                specialAction: 'price-wheel'
+            };
+
+            // Update player position
+            const updatedGameState = {
+                ...gameState,
+                players: updatedPlayers,
+                currentPlayerIndex: getNextPlayerIndex(currentPlayerIndex, players.length)
+            };
+
+            setGameState(updatedGameState);
+
+            // Show the info modal for passed start
+            setTimeout(() => {
+                if (gameBoardRef.current) {
+                    gameBoardRef.current.showSpaceInfo(passedStartSpace);
+                }
+            }, 800);
             return;
         }
 
         if (landedOnStart) {
-            // Navigate to Rules Wheel immediately
-            navigate(RoutePath.RULES_WHEEL);
+            // Create a virtual space for "landed on start"
+            const landedOnStartSpace: GameSpaceType = {
+                id: 'landed-on-start',
+                type: 'start',
+                color: 'checkered',
+                position: { x: 0, y: 0 },
+                icon: '🏁',
+                label: 'Landed on Start',
+                specialAction: 'rules-wheel'
+            };
+
+            // Update player position
+            const updatedGameState = {
+                ...gameState,
+                players: updatedPlayers,
+                currentPlayerIndex: getNextPlayerIndex(currentPlayerIndex, players.length)
+            };
+
+            setGameState(updatedGameState);
+
+            // Show the info modal for landed on start
+            setTimeout(() => {
+                if (gameBoardRef.current) {
+                    gameBoardRef.current.showSpaceInfo(landedOnStartSpace);
+                }
+            }, 800);
             return;
         }
 
