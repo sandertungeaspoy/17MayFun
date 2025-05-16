@@ -72,35 +72,44 @@ export const calculatePosition = (index: number, totalSpaces: number): { x: numb
     // This ensures all spaces are visible on screen
 
     // Define the dimensions of the rectangle
-    const width = 8; // Number of spaces in the width
-    const height = 4; // Fixed height for the rectangle
+    const width = 12; // Number of spaces in the width
+    const height = 6; // Fixed height for the rectangle
 
-    // Calculate the position along the perimeter of the rectangle
-    const perimeter = 2 * width + 2 * (height - 2);
-    const normalizedIndex = index % perimeter;
+    // Calculate the total number of spaces that can fit on the perimeter
+    const perimeter = 2 * width + 2 * height - 4; // Subtract 4 to avoid double-counting corners
 
+    // Ensure we have enough space for all spaces with proper spacing
+    // Each space is 70px wide/high according to CSS
+    const spaceSize = 1; // In grid units (will be scaled later)
+    const spacing = 0.06; // Space between spaces (4px / 70px ≈ 0.06 grid units)
+
+    // Calculate position based on index
     let x, y;
 
+    // Normalize the index to the perimeter
+    const normalizedIndex = index % perimeter;
+
+    // Calculate the position along the perimeter
     if (normalizedIndex < width) {
         // Top row (left to right)
-        x = normalizedIndex;
+        x = normalizedIndex * (spaceSize + spacing);
         y = 0;
     } else if (normalizedIndex < width + height - 1) {
         // Right column (top to bottom)
-        x = width - 1;
-        y = normalizedIndex - width + 1;
-    } else if (normalizedIndex < 2 * width + height - 1) {
+        x = (width - 1) * (spaceSize + spacing);
+        y = (normalizedIndex - width + 1) * (spaceSize + spacing);
+    } else if (normalizedIndex < 2 * width + height - 2) {
         // Bottom row (right to left)
-        x = 2 * width + height - 2 - normalizedIndex;
-        y = height - 1;
+        x = (2 * width + height - 3 - normalizedIndex) * (spaceSize + spacing);
+        y = (height - 1) * (spaceSize + spacing);
     } else {
         // Left column (bottom to top)
         x = 0;
-        y = perimeter - normalizedIndex;
+        y = (2 * height + 2 * width - 4 - normalizedIndex) * (spaceSize + spacing);
     }
 
     // Scale and adjust the coordinates to fit within the visible area
-    const scale = 0.8;
+    const scale = 1.0; // Adjust this value to fit the board properly
     const offsetX = 1;
     const offsetY = 1;
 
@@ -115,13 +124,10 @@ export const generateGameSpaces = (): GameSpace[] => {
     const spaces: GameSpace[] = [];
     const totalSpaces = BOARD_SIZE;
 
-    // Create a weighted distribution of space types
+    // Create a weighted distribution of space types (excluding start)
     const spaceTypeDistribution: SpaceType[] = [];
 
-    // Add start space
-    spaceTypeDistribution.push('start');
-
-    // Add other space types with desired frequencies
+    // Add other space types with desired frequencies (no start space here)
     spaceTypeDistribution.push(...Array(6).fill('trivia'));
     spaceTypeDistribution.push(...Array(5).fill('chance'));
     spaceTypeDistribution.push(...Array(4).fill('music-bingo'));
@@ -134,21 +140,25 @@ export const generateGameSpaces = (): GameSpace[] => {
     // Shuffle the space types to randomize them
     const shuffledTypes = [...spaceTypeDistribution].sort(() => Math.random() - 0.5);
 
-    // If we need more space types than in our distribution, repeat the pattern
-    const repeatedTypes: SpaceType[] = [];
-    while (repeatedTypes.length < totalSpaces) {
-        repeatedTypes.push(...shuffledTypes);
-    }
+    // Create an array for all spaces, starting with 'start' as the first space
+    const allTypes: SpaceType[] = ['start'];
 
-    // Make sure the first space is always 'start'
-    repeatedTypes[0] = 'start';
+    // Fill the rest of the spaces with the shuffled types
+    while (allTypes.length < totalSpaces) {
+        // Add shuffled types, but skip any 'start' types to avoid duplicates
+        for (const type of shuffledTypes) {
+            if (type !== 'start' && allTypes.length < totalSpaces) {
+                allTypes.push(type);
+            }
+        }
+    }
 
     // Colors for the spaces (red, white, blue)
     const colors = ['#BA0C2F', '#FFFFFF', '#00205B'];
 
     // Create the spaces
     for (let i = 0; i < totalSpaces; i++) {
-        const type = repeatedTypes[i];
+        const type = allTypes[i];
 
         // Determine color based on type and position
         let color;
