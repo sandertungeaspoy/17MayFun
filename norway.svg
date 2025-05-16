@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 22 16">
+	<title>Flag of Norway</title>
+	<rect width="22" height="16" fill="#ba0c2f"/>
+	<path d="M0,8h22M8,0v16" stroke="#fff" stroke-width="4"/>
+	<path d="M0,8h22M8,0v16" stroke="#00205b" stroke-width="2"/>
+<style xmlns="" class="darkreader darkreader--fallback">html, body, body :not(iframe) {
+    background-color: var(--darkreader-background-ffffff, #181a1b) !important;
+    border-color: var(--darkreader-border-404040, #776e62) !important;
+    color: var(--darkreader-text-000000, #e8e6e3) !important;
+}
+div[style*="background-color: rgb(135, 135, 135)"] {
+    background-color: #878787 !important;
+}</style></svg>
