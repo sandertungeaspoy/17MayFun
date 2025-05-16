@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import GameSpace from './GameSpace';
 import PlayerPiece from './PlayerPiece';
 import type { GameSpace as GameSpaceType, Player, SpaceType } from '../../types';
@@ -13,6 +13,19 @@ interface GameBoardProps {
 const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerIndex }) => {
     const [selectedSpace, setSelectedSpace] = useState<GameSpaceType | null>(null);
     const [showSpaceInfo, setShowSpaceInfo] = useState(false);
+    const boardRef = useRef<HTMLDivElement>(null);
+
+    // Center the board view when it first renders
+    useEffect(() => {
+        if (boardRef.current) {
+            const container = boardRef.current.parentElement;
+            if (container) {
+                // Center the scroll position
+                container.scrollLeft = (boardRef.current.scrollWidth - container.clientWidth) / 2;
+                container.scrollTop = (boardRef.current.scrollHeight - container.clientHeight) / 2;
+            }
+        }
+    }, [spaces]);
 
     // Handle clicking on a space
     const handleSpaceClick = (space: GameSpaceType) => {
@@ -160,7 +173,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ spaces, players, currentPlayerInd
 
     return (
         <div className="game-board-container">
-            <div className="game-board">
+            <div className="game-board" ref={boardRef}>
                 {spaces.map(space => (
                     <GameSpace
                         key={space.id}

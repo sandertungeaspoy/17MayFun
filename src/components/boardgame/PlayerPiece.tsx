@@ -16,8 +16,8 @@ const PlayerPiece: React.FC<PlayerPieceProps> = ({ player, spaces, isCurrentPlay
         }
 
         return {
-            x: currentSpace.position.x * 100 + 50, // Center of the space
-            y: currentSpace.position.y * 100 + 50  // Center of the space
+            x: currentSpace.position.x * 100 + 35, // Center of the space (adjusted for smaller spaces)
+            y: currentSpace.position.y * 100 + 35  // Center of the space (adjusted for smaller spaces)
         };
     };
 

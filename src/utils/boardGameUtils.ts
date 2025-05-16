@@ -72,49 +72,45 @@ export const getLabelForType = (type: SpaceType): string => {
 
 // Function to calculate position for a space in a loop layout
 export const calculatePosition = (index: number, totalSpaces: number): { x: number, y: number } => {
-    // Create a more interesting path with multiple segments and turns
-    // This creates a winding path that forms a closed loop
+    // Create a rectangular board layout that fits within the visible area
+    // This ensures all spaces are visible on screen
 
-    const boardSize = Math.ceil(Math.sqrt(totalSpaces)) + 2; // Size of the board grid
-    const center = Math.floor(boardSize / 2);
+    // Define the dimensions of the rectangle
+    const width = 8; // Number of spaces in the width
+    const height = 4; // Fixed height for the rectangle
 
-    // Create a spiral-like path
-    let x = 0;
-    let y = 0;
-    let direction = 0; // 0: right, 1: down, 2: left, 3: up
-    let steps = 1;
-    let stepCount = 0;
-    let turnCount = 0;
+    // Calculate the position along the perimeter of the rectangle
+    const perimeter = 2 * width + 2 * (height - 2);
+    const normalizedIndex = index % perimeter;
 
-    for (let i = 0; i < index; i++) {
-        // Move in the current direction
-        switch (direction) {
-            case 0: x++; break; // Right
-            case 1: y++; break; // Down
-            case 2: x--; break; // Left
-            case 3: y--; break; // Up
-        }
+    let x, y;
 
-        stepCount++;
-
-        // Check if we need to turn
-        if (stepCount === steps) {
-            direction = (direction + 1) % 4;
-            stepCount = 0;
-            turnCount++;
-
-            // Increase steps every 2 turns
-            if (turnCount % 2 === 0) {
-                steps++;
-            }
-        }
+    if (normalizedIndex < width) {
+        // Top row (left to right)
+        x = normalizedIndex;
+        y = 0;
+    } else if (normalizedIndex < width + height - 1) {
+        // Right column (top to bottom)
+        x = width - 1;
+        y = normalizedIndex - width + 1;
+    } else if (normalizedIndex < 2 * width + height - 1) {
+        // Bottom row (right to left)
+        x = 2 * width + height - 2 - normalizedIndex;
+        y = height - 1;
+    } else {
+        // Left column (bottom to top)
+        x = 0;
+        y = perimeter - normalizedIndex;
     }
 
-    // Scale and center the coordinates
-    const scale = 2.5;
+    // Scale and adjust the coordinates to fit within the visible area
+    const scale = 0.8;
+    const offsetX = 1;
+    const offsetY = 1;
+
     return {
-        x: (x * scale) + center,
-        y: (y * scale) + center
+        x: x * scale + offsetX,
+        y: y * scale + offsetY
     };
 };
 
