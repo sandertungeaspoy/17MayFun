@@ -16,54 +16,63 @@ import type { Player, BoardGameState } from '../types';
 
 const BoardGamePage: React.FC = () => {
     const navigate = useNavigate();
-    const [gameState, setGameState] = useState<BoardGameState>(initializeGameState());
+    // Initialize state with a loading placeholder
+    const [gameState, setGameState] = useState<BoardGameState | null>(null);
     const [spaceActionMessage, setSpaceActionMessage] = useState<string | null>(null);
 
-    // Load saved game state on component mount
+    // Load saved game state on component mount or initialize a new one if none exists
     useEffect(() => {
         const savedState = loadGameState();
         if (savedState) {
+            // Use the saved state
             setGameState(savedState);
+        } else {
+            // Only initialize a new game if no saved state exists
+            setGameState(initializeGameState());
         }
     }, []);
 
-    // Save game state whenever it changes
+    // Save game state whenever it changes (but only if gameState is not null)
     useEffect(() => {
-        saveGameState(gameState);
+        if (gameState) {
+            saveGameState(gameState);
+        }
     }, [gameState]);
 
     // Handle adding a player
     const handleAddPlayer = (player: Player) => {
-        if (gameState.gameStarted) return;
+        if (!gameState || gameState.gameStarted) return;
 
-        setGameState(prevState => ({
-            ...prevState,
-            players: [...prevState.players, player]
-        }));
+        setGameState({
+            ...gameState,
+            players: [...gameState.players, player]
+        });
     };
 
     // Handle removing a player
     const handleRemovePlayer = (playerId: string) => {
-        if (gameState.gameStarted) return;
+        if (!gameState || gameState.gameStarted) return;
 
-        setGameState(prevState => ({
-            ...prevState,
-            players: prevState.players.filter(player => player.id !== playerId)
-        }));
+        setGameState({
+            ...gameState,
+            players: gameState.players.filter(player => player.id !== playerId)
+        });
     };
 
     // Handle starting the game
     const handleStartGame = () => {
-        if (gameState.players.length < 2) return;
+        if (!gameState || gameState.players.length < 2) return;
 
-        setGameState(prevState => ({
-            ...prevState,
+        setGameState({
+            ...gameState,
             gameStarted: true
-        }));
+        });
     };
 
     // Handle rolling the dice and moving the player
     const handleRollDice = (steps: number) => {
+        if (!gameState) return;
+
         const { players, currentPlayerIndex, spaces } = gameState;
         const currentPlayer = players[currentPlayerIndex];
 
@@ -122,10 +131,10 @@ const BoardGamePage: React.FC = () => {
                     }, 500);
 
                     // Update game state with the new spaces
-                    setGameState(prevState => ({
-                        ...prevState,
+                    setGameState({
+                        ...gameState,
                         spaces: updatedSpaces
-                    }));
+                    });
                     break;
                 case 'chance':
                     message = `Chance: ${landedSpace.chanceOutcome}`;
@@ -206,11 +215,11 @@ const BoardGamePage: React.FC = () => {
 
         // Move to the next player after a delay
         setTimeout(() => {
-            setGameState(prevState => ({
-                ...prevState,
+            setGameState({
+                ...gameState,
                 players: updatedPlayers,
                 currentPlayerIndex: getNextPlayerIndex(currentPlayerIndex, players.length)
-            }));
+            });
 
             setSpaceActionMessage(null);
         }, 3000);
@@ -224,6 +233,20 @@ const BoardGamePage: React.FC = () => {
             saveGameState(newGameState);
         }
     };
+
+    // If gameState is still loading, show a loading indicator
+    if (!gameState) {
+        return (
+            <div className="page-content board-game-page">
+                <Header
+                    title="Board Game"
+                    showBackButton={true}
+                    onBack={() => navigate(RoutePath.HOME)}
+                />
+                <div className="loading">Loading game...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="page-content board-game-page">
