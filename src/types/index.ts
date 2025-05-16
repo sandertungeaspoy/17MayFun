@@ -47,7 +47,6 @@ export interface QuizAttempt {
 // Board game types
 export type SpaceType =
     | 'start'
-    | 'finish'
     | 'trivia'
     | 'chance'
     | 'music-bingo'

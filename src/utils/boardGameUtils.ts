@@ -19,8 +19,6 @@ export const getIconForType = (type: SpaceType): string => {
     switch (type) {
         case 'start':
             return '🏁';
-        case 'finish':
-            return '🏁';
         case 'trivia':
             return '❓';
         case 'chance':
@@ -46,9 +44,7 @@ export const getIconForType = (type: SpaceType): string => {
 export const getLabelForType = (type: SpaceType): string => {
     switch (type) {
         case 'start':
-            return 'Start';
-        case 'finish':
-            return 'Finish';
+            return 'Start/Finish';
         case 'trivia':
             return 'Trivia';
         case 'chance':
@@ -156,7 +152,7 @@ export const generateGameSpaces = (): GameSpace[] => {
 
         // Determine color based on type and position
         let color;
-        if (type === 'start' || type === 'finish') {
+        if (type === 'start') {
             color = 'checkered'; // Special color for start/finish
         } else {
             // Alternate between red, white, and blue
