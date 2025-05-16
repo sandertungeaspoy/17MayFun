@@ -214,13 +214,6 @@ export const quizzes: QuizConfig[] = [
                 answer: encryptAnswer("Wellington", ENCRYPTION_SALT)
             },
             {
-                id: "13",
-                type: "image",
-                question: "Hvilket videospill vises på dette bildet?",
-                imageUrl: "https://upload.wikimedia.org/wikipedia/en/5/51/Among_Us_cover_art.jpg",
-                answer: encryptAnswer("Among Us", ENCRYPTION_SALT)
-            },
-            {
                 id: "14",
                 type: "multiple-choice",
                 question: "Hva står forkortelsen 'NFT' for?",
@@ -259,13 +252,6 @@ export const quizzes: QuizConfig[] = [
                 answer: encryptAnswer("2018", ENCRYPTION_SALT)
             },
             {
-                id: "19",
-                type: "image",
-                question: "Hva heter filmen dette bildet er hentet fra?",
-                imageUrl: "https://upload.wikimedia.org/wikipedia/en/a/a1/Inception_ver3.jpg",
-                answer: encryptAnswer("Inception", ENCRYPTION_SALT)
-            },
-            {
                 id: "20",
                 type: "text",
                 question: "Hva heter kryptovalutaen med forkortelsen ETH?",
@@ -283,13 +269,6 @@ export const quizzes: QuizConfig[] = [
                 type: "text",
                 question: "Hva heter hovedstaden i Canada?",
                 answer: encryptAnswer("Ottawa", ENCRYPTION_SALT)
-            },
-            {
-                id: "23",
-                type: "image",
-                question: "Hvilket spillserien er denne karakteren fra?",
-                imageUrl: "https://upload.wikimedia.org/wikipedia/en/9/95/MarioSMBW.png",
-                answer: encryptAnswer("Super Mario", ENCRYPTION_SALT)
             },
             {
                 id: "24",
@@ -329,13 +308,6 @@ export const quizzes: QuizConfig[] = [
                 type: "text",
                 question: "Hva er hovedstaden i Island?",
                 answer: encryptAnswer("Reykjavik", ENCRYPTION_SALT)
-            },
-            {
-                id: "30",
-                type: "image",
-                question: "Hvilken film kommer dette bildet fra?",
-                imageUrl: "https://upload.wikimedia.org/wikipedia/en/0/0e/Barbie_2023_poster.jpg",
-                answer: encryptAnswer("Barbie", ENCRYPTION_SALT)
             },
             {
                 id: "31",
