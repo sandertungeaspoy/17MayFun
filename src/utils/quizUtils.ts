@@ -1,4 +1,4 @@
-import type { QuizConfig, QuizQuestion, QuizAttempt, UserAnswer } from '../types';
+import type { QuizConfig, QuizAttempt, UserAnswer } from '../types';
 
 // Simple encryption/decryption functions
 // Note: In a production app, you would use a more secure encryption library
@@ -42,16 +42,37 @@ export const hashPassword = (password: string): string => {
     return hash.toString(16);
 };
 
-// The password is "17mai" - this is the hash of that password
-export const QUIZ_PASSWORD_HASH = '1a2b3c4d5e'; // Replace with actual hash of your password
+// Expose hashPassword function on window object for debug console
+declare global {
+    interface Window {
+        hashPassword: (password: string) => string;
+    }
+}
+
+// Add hashPassword to window object if we're in a browser environment
+if (typeof window !== 'undefined') {
+    window.hashPassword = hashPassword;
+}
+
+// Default password hash for backward compatibility
+export const QUIZ_PASSWORD_HASH = hashPassword('17mai');
 
 // Salt for encryption - in a real app, this would be more secure
 export const ENCRYPTION_SALT = 'NorwegianQuiz2025';
 
-// Verify if the provided password is correct
-export const isPasswordCorrect = (password: string): boolean => {
-    // For demonstration purposes, we'll just check against a hardcoded password
-    // In a real app, you would compare hashes
+// Verify if the provided password is correct for a specific quiz
+export const isPasswordCorrect = (password: string, quiz?: QuizConfig): boolean => {
+    if (!quiz) {
+        // Fallback to default password for backward compatibility
+        return password === '17mai';
+    }
+
+    // If quiz has a passwordHash, use it
+    if (quiz.passwordHash) {
+        return hashPassword(password) === quiz.passwordHash;
+    }
+
+    // Otherwise use the default password
     return password === '17mai';
 };
 
@@ -107,6 +128,7 @@ export const quizzes: QuizConfig[] = [
         id: 'mixed-quiz',
         title: 'Allmennkunnskap Quiz',
         description: 'Test din kunnskap om Norge og verden',
+        passwordHash: hashPassword('allmenn'),
         questions: [
             // Norske spørsmål
             {
@@ -184,6 +206,7 @@ export const quizzes: QuizConfig[] = [
         id: 'norway-quiz',
         title: 'Norgesquiz',
         description: 'Test din kunnskap om Norge',
+        passwordHash: hashPassword('norge'),
         questions: [
             {
                 id: '1',

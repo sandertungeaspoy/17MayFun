@@ -30,6 +30,7 @@ export interface QuizConfig {
     title: string;
     description: string;
     questions: QuizQuestion[];
+    passwordHash?: string;  // Hash of the password for this quiz
 }
 
 export interface UserAnswer {

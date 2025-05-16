@@ -16,7 +16,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({ quiz, userAnswers, onRestart 
     const handlePasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (isPasswordCorrect(password)) {
+        if (isPasswordCorrect(password, quiz)) {
             setShowAnswers(true);
             setError('');
         } else {

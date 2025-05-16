@@ -197,7 +197,7 @@ const QuizPage: React.FC = () => {
                 <Header
                     title={selectedQuiz.title}
                     showBackButton={true}
-                    onBack={() => navigate('/quiz')}
+                    onBack={() => navigate(RoutePath.HOME)}
                 />
 
                 <QuizResults
@@ -215,7 +215,7 @@ const QuizPage: React.FC = () => {
             <Header
                 title={selectedQuiz?.title || 'Quiz'}
                 showBackButton={true}
-                onBack={() => navigate('/quiz')}
+                onBack={() => navigate(RoutePath.HOME)}
             />
 
             {selectedQuiz && (
